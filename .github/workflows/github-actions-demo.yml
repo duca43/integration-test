@@ -1,17 +1,20 @@
-name: GitHub Actions Demo
+name: Continuous Test
 on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - uses: actions/checkout@v2
+      - name: use Node.js ${{ matrix.node-version }}      
+        uses: actions/setup-node@v1
+      - name: install newman
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          npm install -g newman
+          npm install -g newman-reporter-slackreporter
+       # Run postman collection
+      - name: run postman collection        
+        run: |
+          newman run Vivifyscrum.postman_collection.json -e stage-env.json --suppress-exit-code -r slackreporter --reporter-slackreporter-webhookurl https://hooks.slack.com/services/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
