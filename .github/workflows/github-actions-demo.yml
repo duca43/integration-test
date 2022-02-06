@@ -13,8 +13,8 @@ jobs:
       - name: install newman
         run: |
           npm install -g newman
-          npm install -g newman-reporter-slackreporter
+          npm install -g newman-reporter-slackmsg
        # Run postman collection
       - name: run postman collection        
         run: |
-          newman run Vivifyscrum.postman_collection.json -e stage-env.json --suppress-exit-code -r slackreporter --reporter-slackreporter-webhookurl https://hooks.slack.com/services/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
+          newman run Vivifyscrum.postman_collection.json -e stage-env.json --suppress-exit-code -r cli,slackmsg --reporter-slackmsg-webhookurl https://hooks.slack.com/services/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
