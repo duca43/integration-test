@@ -20,3 +20,4 @@ jobs:
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}     
         run: |
           newman run Vivifyscrum.postman_collection.json -e stage-env.json --suppress-exit-code -r cli,slackmsg --reporter-slackmsg-webhookurl $SLACK_WEBHOOK_URL
+          echo $?
