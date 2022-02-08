@@ -19,7 +19,7 @@ jobs:
         run: mkdir -p test-results-artifacts
       - name: Run postman collection
         run: |
-          newman run Vivifyscrum.postman_collection.json -e stage-env.json -r cli,htmlextra --reporter-htmlextra-export test-results-artifacts/report.html f
+          newman run Vivifyscrum.postman_collection.json -e stage-env.json -x -r cli,htmlextra --reporter-htmlextra-export test-results-artifacts/report.html f
       - name: Output the results
         uses: actions/upload-artifact@v2
         with:
