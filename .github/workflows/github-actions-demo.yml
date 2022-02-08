@@ -8,16 +8,20 @@ jobs:
         node-version: [16.x]
     steps:
       - uses: actions/checkout@v2
-      - name: use Node.js ${{ matrix.node-version }}      
+      - name: Use Node.js ${{ matrix.node-version }}      
         uses: actions/setup-node@v1
-      - name: install newman
+      - name: Install newman
         run: |
           npm install -g newman
-          npm install -g newman-reporter-slackmsg
+          npm install -g newman-reporter-htmlextra
        # Run postman collection
-      - name: run postman collection   
-        env:
-          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}     
+      - name: Make Directory for Test Results
+        run: mkdir -p test-results-artifacts
+      - name: Run postman collection
         run: |
-          newman run Vivifyscrum.postman_collection.json -e stage-env.json -r cli,slackmsg --reporter-slackmsg-webhookurl $SLACK_WEBHOOK_URL
-          echo $?
+          newman run Vivifyscrum.postman_collection.json -e stage-env.json -r cli,htmlextra --reporter-htmlextra-export test-results-artifacts/report.html f
+      - name: Output the results
+        uses: actions/upload-artifact@v2
+        with:
+         name: Reports
+         path: test-results-artifacts
